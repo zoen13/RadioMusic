@@ -4,6 +4,12 @@ const app = express()
 var bodyParser=require('body-parser')
 var rp = require('request-promise')
 
+var mongoose=require('mongoose');
+log = require('./models/log');
+
+mongoose.connect('mongodb://admin:smghd1376@jnmi.a-radio.cn:30000/MusicLog');
+var db=mongoose.connection;
+
 //以下两句是为了能让程序解析出post上来的数据
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
@@ -58,6 +64,33 @@ app.use("/fm_trash",require("./router/fm_trash"))
 
 app.post('/api/qbsearch.do',function(req,res){
 	//console.log(req.body.key);
+
+	Date.prototype.Format = function (fmt) {  
+	    var o = {
+	        "M+": this.getMonth() + 1, //月份 
+	        "d+": this.getDate(), //日 
+	        "h+": this.getHours(), //小时 
+	        "m+": this.getMinutes(), //分 
+	        "s+": this.getSeconds(), //秒 
+	        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+	        "S": this.getMilliseconds() //毫秒 
+	    };
+	    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+	    for (var k in o)
+	    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+	    return fmt;
+	};
+
+	var logObject = new Object();
+	logObject.ip = req.connection.remoteAddress;
+	logObject.keyword = req.body.key;
+	logObject.createtime = (new Date()).Format("yyyy-MM-dd hh:mm:ss.S");
+	log.addLog(logObject,function(err,logObject){
+		if (err){
+            throw err;
+        }
+	});
+
 	var rp = require('request-promise');
     var options = {
         method:'get',
@@ -125,7 +158,7 @@ app.post('/api/qbsearch.do',function(req,res){
 				                        "details": {
 				                            "_id": '5253d2b70ef116f7c5b142e8',
 				                            "url": urldata.data[0].url,
-				                            "playurl": "详见playurl字段说明",
+				                            "playurl": urldata.data[0].url,
 				                            "ineturl": urldata.data[0].url,
 				                            "localurl": urldata.data[0].url,
 				                            "duration": parseInt(parseInt(song.duration)/1000),

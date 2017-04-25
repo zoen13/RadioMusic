@@ -14,7 +14,8 @@
     "express": "^4.15.2",
     "body-parser":"*",
     "request":"*",
-    "request-promise":"*"
+    "request-promise":"*",
+    "mongoose":"*"
   },
   "devDependencies": {
     "intelli-espower-loader": "^1.0.1",
