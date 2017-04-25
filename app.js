@@ -190,7 +190,7 @@ app.post('/api/qbsearch.do',function(req,res){
 				    	var nodeString=JSON.stringify(node);
 					    var nodeContent=nodeString.substring(0,nodeString.length);
 					    var preString=JSON.stringify({"ret": 0,"result":0});
-					    console.log(preString.substring(0,18)+nodeContent+"}");
+					    //console.log(preString.substring(0,18)+nodeContent+"}");
 					    res.send(preString.substring(0,18)+nodeContent+"}");
 						//res.send({"ret": 0,"result":nodeContent});
 				    }
