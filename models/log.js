@@ -9,10 +9,10 @@ var logSchema = mongoose.Schema({
         createtime:String
 });
 
-var info = module.exports = mongoose.model('log',logSchema);
+var log = module.exports = mongoose.model('log',logSchema);
 
 
 //create log
 module.exports.addLog=function(Log,callback){
-        info.create(Log,callback);
+        log.create(Log,callback);
 };
